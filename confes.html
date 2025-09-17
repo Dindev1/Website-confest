@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nyatakan Perasaan</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Nyatakan Perasaanmu</h1>
+        <input type="text" id="nomor" placeholder="Nomor tujuan (contoh: 6281234567890)" />
+        <input type="text" id="name" placeholder="Nama cewek" />
+        <textarea id="message" rows="4" placeholder="Tulis pesammu..."></textarea>
+        <button onclick="kirimPesan()">Kirim via WhatsApp</button>
+        <p class="note">Setelah klik tombol, kamu akan diarahkan ke WhatsApp.</p>
+    </div>
+
+    <script>
+        function kirimPesan() {
+            const name = document.getElementById('name').value.trim();
+            const message = document.getElementById('message').value.trim();
+            let nomor = document.getElementById('nomor').value.trim();
+
+            if (!name) {
+                alert('Tolong isi nama cewek.');
+                return;
+            }
+            if (!message) {
+                alert('Tolong isi pesanmu.');
+                return;
+            }
+            if (!nomor) {
+                alert('Tolong isi nomor tujuan.');
+                return;
+            }
+
+            // Bersihkan nomor: hapus spasi, tanda +, atau simbol lain kecuali digit
+            nomor = nomor.replace(/[^0-9]/g, '');
+
+            // Pastikan nomor sudah dalam format internasional tanpa tanda '+'
+            // Contoh: 6281234567890 untuk nomor Indonesia
+            if (nomor.length < 10) {
+                alert('Nomor tujuan tampaknya tidak valid.');
+                return;
+            }
+
+            // Format pesan yang akan dikirim ke WhatsApp
+            const text = `Hai ${name}, aku ingin bilang sesuatu:\n${message}\nSemoga kamu mau menerima perasaanku 😊`;
+
+            // Encode pesan agar bisa dipakai di URL
+            const encodedText = encodeURIComponent(text);
+
+            // URL WhatsApp API dengan nomor tujuan dan pesan
+            const url = `https://wa.me/${nomor}?text=${encodedText}`;
+
+            // Buka tab baru menuju WhatsApp
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
