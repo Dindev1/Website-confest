@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nyatakan Perasaan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8cdda, #1d2b64);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(0,0,0,0.6);
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 10px 0 20px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: none;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 8px #ff6f91;
+        }
+        button {
+            background-color: #ff6f91;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #ff3b6f;
+        }
+        .note {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #ffb3c6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Nyatakan Perasaanmu</h1>
+        <input type="text" id="nomor" placeholder="Nomor tujuan (contoh: 6281234567890)" />
+        <input type="text" id="name" placeholder="Nama cewek" />
+        <textarea id="message" rows="4" placeholder="Tulis pesammu..."></textarea>
+        <button onclick="kirimPesan()">Kirim via WhatsApp</button>
+        <p class="note">Setelah klik tombol, kamu akan diarahkan ke WhatsApp.</p>
+    </div>
+
+    <script>
+        function kirimPesan() {
+            const name = document.getElementById('name').value.trim();
+            const message = document.getElementById('message').value.trim();
+            let nomor = document.getElementById('nomor').value.trim();
+
+            if (!name) {
+                alert('Tolong isi nama cewek.');
+                return;
+            }
+            if (!message) {
+                alert('Tolong isi pesanmu.');
+                return;
+            }
+            if (!nomor) {
+                alert('Tolong isi nomor tujuan.');
+                return;
+            }
+
+            // Bersihkan nomor: hapus spasi, tanda +, atau simbol lain kecuali digit
+            nomor = nomor.replace(/[^0-9]/g, '');
+
+            // Pastikan nomor sudah dalam format internasional tanpa tanda '+'
+            // Contoh: 6281234567890 untuk nomor Indonesia
+            if (nomor.length < 10) {
+                alert('Nomor tujuan tampaknya tidak valid.');
+                return;
+            }
+
+            // Format pesan yang akan dikirim ke WhatsApp
+            const text = `Hai ${name}, aku ingin bilang sesuatu:\n${message}\nSemoga kamu mau menerima perasaanku 😊`;
+
+            // Encode pesan agar bisa dipakai di URL
+            const encodedText = encodeURIComponent(text);
+
+            // URL WhatsApp API dengan nomor tujuan dan pesan
+            const url = `https://wa.me/${nomor}?text=${encodedText}`;
+
+            // Buka tab baru menuju WhatsApp
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
